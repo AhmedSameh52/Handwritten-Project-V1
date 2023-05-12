@@ -1,6 +1,7 @@
+import io
 from tkinter import *
 from tkinter.colorchooser import askcolor
-from PIL import ImageTk, Image
+from PIL import ImageTk, Image, ImageChops
 from tkinter import ttk
 import tkinter as tk
 from PIL import ImageGrab
@@ -22,7 +23,7 @@ def locate_xy(work):
 def addLine(work):
     global current_x, current_y
 
-    canvas.create_line((current_x,current_y,work.x,work.y),width = 10, fill = color, capstyle=ROUND, smooth=True)
+    canvas.create_line((current_x,current_y,work.x,work.y),width = 6, fill = color, capstyle=ROUND, smooth=True)
     current_x, current_y = work.x, work.y
 
 def show_color(new_color):
@@ -101,12 +102,23 @@ print(x)
 
 # Define the function to capture the snapshot and send it to the machine learning model
 def capture_and_send():
-    # Use the canvas's postscript() method to render the canvas to the new image.
-    # Capture the snapshot of the defined area
-    img = ImageGrab.grab(bbox=capture_region)
+    # Use the canvas's postscript() method to render the canvas to a new image.
+    img = canvas.postscript(width=canvas.winfo_width(), height=canvas.winfo_height())
     
-    # Save the snapshot to disk
-    img.save("captured_snapshot.jpg")
+    # Convert the image to a binary image file.
+    with io.BytesIO() as f:
+        f.write(img.encode())
+        img = f.getvalue()
+    
+    # Convert the image to a PIL image.
+    pil_img = Image.open(io.BytesIO(img))
+    
+    # Crop the image to the size of the canvas.
+    pil_img = pil_img.crop((0, 0,680,300))
+    
+    # Save the image to disk.
+    pil_img.save("captured_snapshot.jpg")
+
 
 button = tk.Button(root, text="Capture Snapshot", command=capture_and_send)
 
