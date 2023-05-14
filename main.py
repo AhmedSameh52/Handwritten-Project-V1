@@ -1,4 +1,5 @@
 import io
+from modelController import *
 from tkinter import *
 from tkinter.colorchooser import askcolor
 from PIL import ImageTk, Image, ImageChops
@@ -78,7 +79,7 @@ def display_pallete():
 
 display_pallete()
 
-canvas = Canvas(root, width = 900, height = 400, background="white", cursor="hand2")
+canvas = Canvas(root, width = 600, height = 100, background="white", cursor="hand2")
 canvas.pack()
 canvas.place(x=75,y=75)
 
@@ -98,7 +99,7 @@ capture_region = (x, y, x1, y1)
 print(x)
 
 
-
+predictedWord = ""
 
 # Define the function to capture the snapshot and send it to the machine learning model
 def capture_and_send():
@@ -114,10 +115,11 @@ def capture_and_send():
     pil_img = Image.open(io.BytesIO(img))
     
     # Crop the image to the size of the canvas.
-    pil_img = pil_img.crop((0, 0,680,300))
+    pil_img = pil_img.crop((0, 0,450,80))
     
     # Save the image to disk.
     pil_img.save("captured_snapshot.jpg")
+    predictedWord = getPredictedWord()
 
 
 button = tk.Button(root, text="Capture Snapshot", command=capture_and_send)
