@@ -8,7 +8,7 @@ import tkinter as tk
 from PIL import ImageGrab
 root = Tk()
 root.title("White Board")
-root.geometry ( "1050x570+150+50" )
+root.geometry ( "900x270+150+50" )
 root.configure (bg = "#f2f3f5")
 root. resizable(False,False)
 
@@ -81,7 +81,7 @@ display_pallete()
 
 canvas = Canvas(root, width = 600, height = 100, background="white", cursor="hand2")
 canvas.pack()
-canvas.place(x=75,y=75)
+canvas.place(x=130,y=75)
 
 canvas.bind('<Button-1>', locate_xy)
 canvas.bind('<B1-Motion>', addLine)
@@ -125,7 +125,7 @@ def capture_and_send():
 button = tk.Button(root, text="Capture Snapshot", command=capture_and_send)
 
 button.pack()
-button.place(x = 525, y = 500)
+button.place(x = 400, y = 230)
 
 root. mainloop()
 
