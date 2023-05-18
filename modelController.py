@@ -206,7 +206,7 @@ def brightenOutsideImage(img):
     # increase line width
     kernel = np.ones((3, 3), np.uint8)
     imgMorph = cv2.erode(imgContrast, kernel, iterations = 3)
-
+    cv2.imwrite("test2.png", imgMorph)
     return imgMorph
 
 
@@ -214,11 +214,11 @@ def brightenOutsideImage(img):
 def getPredictedWord():
     model = tf.keras.models.load_model('new_model.h5')
 
-    image = Image.open('ABCD.png')
+    image = Image.open('captured_snapshot.jpg')
     
     image = cropImage(image)
     
-    image = cv2.imread('ABCD.png', cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread('captured_snapshot.jpg', cv2.IMREAD_GRAYSCALE)
     image = preprocessImage(image)
     
     
@@ -239,8 +239,9 @@ def getPredictedOutsideWord():
     image = cv2.imread("captured_snapshot_out.jpg")
     image = processOutsideImage(image)
     img = cv2.imread('result2.png', cv2.IMREAD_GRAYSCALE)
-    image = brightenOutsideImage(img)
-
+    brightenOutsideImage(img)
+    image = cv2.imread('test2.png', cv2.IMREAD_GRAYSCALE)
+    image = preprocessImage(image)
     image = image/255.
     pred = model.predict(image.reshape(1, 256, 64, 1))
 
