@@ -10,7 +10,7 @@ import tkinter as tk
 from PIL import ImageGrab
 root = Tk()
 root.title("White Board")
-root.geometry ( "900x350+150+50" )
+root.geometry ( "750x350+150+50" )
 root.configure (bg = "#f2f3f5")
 root. resizable(False,False)
 
@@ -39,13 +39,13 @@ def new_canvas():
     display_pallete()
 
 #icon
-image_icon = ImageTk.PhotoImage(file = "gemy.png")
+image_icon = ImageTk.PhotoImage(file = "images/GUI images/logo.png")
 root.iconphoto(False, image_icon)
 
 # color_box = ImageTk.PhotoImage(file = "boardColor.png")
 # Label(root, image = color_box, bg = "#f2f3f5").place(x = 10, y = 20)
 
-eraser = ImageTk.PhotoImage(file = "eraser.png")
+eraser = ImageTk.PhotoImage(file = "images/GUI images/eraser-tool.png")
 Button(root, image = eraser, bg = "#f2f3f5", command = new_canvas).place(x = 750, y = 10)
 
 
@@ -92,7 +92,7 @@ def upload_file():
     row=3 # start from row 3 
     for f in filename:
         img=cv2.imread(f)
-        cv2.imwrite("captured_snapshot_out.jpg",img)
+        cv2.imwrite("images/Model Temp Images/captured_snapshot_out.jpg",img)
         predictedWord=getPredictedOutsideWord()   # read the image file
         # img=ImageTk.PhotoImage(img)
         e1 =tk.Label(root)
@@ -150,7 +150,7 @@ def capture_and_send():
     pil_img = pil_img.crop((0, 0,450,80))
     
     # Save the image to disk.
-    pil_img.save("captured_snapshot.jpg")
+    pil_img.save("images/Model Temp Images/captured_snapshot.jpg")
     predictedWord = getPredictedWord()
     label.config(text=predictedWord)
     label.pack()

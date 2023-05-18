@@ -66,7 +66,7 @@ def preprocessImage(img):
     final_img = increaseImageQuality(final_img)
     # Rotate the final image 90 degrees clockwise
     final_img = cv2.rotate(final_img, cv2.ROTATE_90_CLOCKWISE)
-    cv2.imwrite('test.png',final_img)
+    cv2.imwrite('images/Model Temp Images/test.png',final_img)
     return final_img
 
 def cropImage(im):
@@ -81,7 +81,7 @@ def cropImage(im):
     res = ImageOps.expand(trimmed, border=1, fill=(255,255,255))
 #     res = ImageOps.expand(res, border=5, fill=(255,255,255))
 #     res = ImageOps.expand(res, border=5, fill=(255,255,255))
-    res.save('result2.png')
+    res.save('images/Model Temp Images/result2.png')
     return res
 
 
@@ -157,7 +157,7 @@ def processOutsideImage(image):
             cv2.drawContours(mask, [c], -1, (255,255,255), -1)
             # Crop the image based on the bounding box
             cropped_image = image[y:y+h, x:x+w]
-            cv2.imwrite("result2.png", cropped_image)
+            cv2.imwrite("images/Model Temp Images/result2.png", cropped_image)
 
     # Bitwise-and input image and mask to get result
     # mask = cv2.cvtColor(mask, cv2.COLOR_BGR2GRAY)
@@ -191,7 +191,7 @@ def processOutsideImage(image):
         x, y, w, h = cv2.boundingRect(c)
         # to save the images
         try:
-            cv2.imwrite('result2.png', image[y-50:y+h+50,x-50:x+w+50])
+            cv2.imwrite('images/Model Temp Images/result2.png', image[y-50:y+h+50,x-50:x+w+50])
         except:
             continue
         i += 1
@@ -206,19 +206,19 @@ def brightenOutsideImage(img):
     # increase line width
     kernel = np.ones((3, 3), np.uint8)
     imgMorph = cv2.erode(imgContrast, kernel, iterations = 3)
-    cv2.imwrite("test2.png", imgMorph)
+    cv2.imwrite("images/Model Temp Images/test2.png", imgMorph)
     return imgMorph
 
 
 
 def getPredictedWord():
-    model = tf.keras.models.load_model('new_model.h5')
+    model = tf.keras.models.load_model('Model/new_model.h5')
 
-    image = Image.open('captured_snapshot.jpg')
+    image = Image.open('images/Model Temp Images/captured_snapshot.jpg')
     
     image = cropImage(image)
     
-    image = cv2.imread('captured_snapshot.jpg', cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread('images/Model Temp Images/captured_snapshot.jpg', cv2.IMREAD_GRAYSCALE)
     image = preprocessImage(image)
     
     
@@ -235,12 +235,12 @@ def getPredictedWord():
     return predicted_word
 
 def getPredictedOutsideWord():
-    model = tf.keras.models.load_model('new_model.h5')
-    image = cv2.imread("captured_snapshot_out.jpg")
+    model = tf.keras.models.load_model('Model/new_model.h5')
+    image = cv2.imread("images/Model Temp Images/captured_snapshot_out.jpg")
     image = processOutsideImage(image)
-    img = cv2.imread('result2.png', cv2.IMREAD_GRAYSCALE)
+    img = cv2.imread('images/Model Temp Images/result2.png', cv2.IMREAD_GRAYSCALE)
     brightenOutsideImage(img)
-    image = cv2.imread('test2.png', cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread('images/Model Temp Images/test2.png', cv2.IMREAD_GRAYSCALE)
     image = preprocessImage(image)
     image = image/255.
     pred = model.predict(image.reshape(1, 256, 64, 1))
