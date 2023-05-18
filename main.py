@@ -94,7 +94,7 @@ def upload_file():
         img=cv2.imread(f)
         cv2.imwrite("captured_snapshot_out.jpg",img)
         predictedWord=getPredictedOutsideWord()   # read the image file
-        img=ImageTk.PhotoImage(img)
+        # img=ImageTk.PhotoImage(img)
         e1 =tk.Label(root)
         e1.grid(row=row,column=col)
         # e1.image = img # keep a reference! by attaching it to a widget attribute
