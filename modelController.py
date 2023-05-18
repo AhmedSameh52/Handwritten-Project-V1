@@ -214,11 +214,11 @@ def brightenOutsideImage(img):
 def getPredictedWord():
     model = tf.keras.models.load_model('new_model.h5')
 
-    image = Image.open('ABCD.png')
+    image = Image.open('captured_snapshot.jpg')
     
     image = cropImage(image)
     
-    image = cv2.imread('ABCD.png', cv2.IMREAD_GRAYSCALE)
+    image = cv2.imread('captured_snapshot.jpg', cv2.IMREAD_GRAYSCALE)
     image = preprocessImage(image)
     
     

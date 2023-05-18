@@ -10,7 +10,7 @@ import tkinter as tk
 from PIL import ImageGrab
 root = Tk()
 root.title("White Board")
-root.geometry ( "900x270+150+50" )
+root.geometry ( "900x350+150+50" )
 root.configure (bg = "#f2f3f5")
 root. resizable(False,False)
 
