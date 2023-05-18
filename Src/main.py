@@ -92,6 +92,8 @@ def upload_file():
     row=3 # start from row 3 
     for f in filename:
         img=cv2.imread(f)
+        img2 =cv2.resize(img, (500, 500))
+        cv2.imshow("Uploaded Image",img2)
         cv2.imwrite("images/Model Temp Images/captured_snapshot_out.jpg",img)
         predictedWord=getPredictedOutsideWord()   # read the image file
         # img=ImageTk.PhotoImage(img)
