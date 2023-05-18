@@ -91,10 +91,9 @@ def upload_file():
     col=1 # start from column 1
     row=3 # start from row 3 
     for f in filename:
-        img=Image.open(f)
-        img.save("captured_snapshot_out.jpg")  
-        predictedWord=processOutsideImage()   # read the image file
-        img=img.resize((100,100)) # new width & height
+        img=cv2.imread(f)
+        cv2.imwrite("captured_snapshot_out.jpg",img)
+        predictedWord=getPredictedOutsideWord()   # read the image file
         img=ImageTk.PhotoImage(img)
         e1 =tk.Label(root)
         e1.grid(row=row,column=col)
