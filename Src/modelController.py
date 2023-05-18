@@ -66,7 +66,7 @@ def preprocessImage(img):
     final_img = increaseImageQuality(final_img)
     # Rotate the final image 90 degrees clockwise
     final_img = cv2.rotate(final_img, cv2.ROTATE_90_CLOCKWISE)
-    cv2.imwrite('images/Model Temp Images/test.png',final_img)
+    cv2.imwrite('images//Model Temp Images/test.png',final_img)
     return final_img
 
 def cropImage(im):
@@ -229,9 +229,7 @@ def getPredictedWord():
                                        greedy=True)[0][0])
 
     predicted_word = autocorrect(num_to_label(decoded[0]))
-    
-    print("The Model predicted: " +num_to_label(decoded[0]))
-    print("After autocorrection: " +predicted_word)
+
     return predicted_word
 
 def getPredictedOutsideWord():
@@ -250,6 +248,4 @@ def getPredictedOutsideWord():
 
     predicted_word = autocorrect(num_to_label(decoded[0]))
     
-    print("The Model predicted: " +num_to_label(decoded[0]))
-    print("After autocorrection: " +predicted_word)
     return predicted_word

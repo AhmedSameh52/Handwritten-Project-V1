@@ -26,7 +26,7 @@ def locate_xy(work):
 def addLine(work):
     global current_x, current_y
 
-    canvas.create_line((current_x,current_y,work.x,work.y),width = 6, fill = color, capstyle=ROUND, smooth=True)
+    canvas.create_line((current_x,current_y,work.x,work.y),width = 5, fill = color, capstyle=ROUND, smooth=True)
     current_x, current_y = work.x, work.y
 
 def show_color(new_color):
@@ -45,13 +45,14 @@ root.iconphoto(False, image_icon)
 # color_box = ImageTk.PhotoImage(file = "boardColor.png")
 # Label(root, image = color_box, bg = "#f2f3f5").place(x = 10, y = 20)
 
-eraser = ImageTk.PhotoImage(file = "images/GUI images/eraser-tool.png")
-Button(root, image = eraser, bg = "#f2f3f5", command = new_canvas).place(x = 750, y = 10)
+color_box = PhotoImage(file = "images/GUI images/color_section.png")
+Label(root,image=color_box,bg="#f2f3f5").place(x=150, y= 10)
 
-
+eraser = ImageTk.PhotoImage(file = "images/GUI images/eraser.png")
+Button(root, image = eraser, bg = "#f2f3f5", command = new_canvas).place(x = 500, y = 28)
 
 colors = Canvas(root, bg = "#ffffff", width = 300, height = 37, bd = 0)
-colors.place(x = 400, y = 10)
+colors.place(x = 180, y = 28)
 
 def display_pallete():
     id = colors.create_rectangle((10,10,30,30),fill = "black")
@@ -69,19 +70,15 @@ def display_pallete():
     id = colors.create_rectangle((130,10,150,30),fill = "orange")
     colors.tag_bind(id, '<Button-1>', lambda x: show_color('orange'))
 
-    id = colors.create_rectangle((160,10,180,30),fill = "yellow")
-    colors.tag_bind(id, '<Button-1>', lambda x: show_color('yellow'))
-
-    id = colors.create_rectangle((190,10,210,30),fill = "green")
+    id = colors.create_rectangle((160,10,180,30),fill = "green")
     colors.tag_bind(id, '<Button-1>', lambda x: show_color('green'))
 
-    id = colors.create_rectangle((220,10,240,30),fill = "blue")
+    id = colors.create_rectangle((190,10,210,30),fill = "blue")
     colors.tag_bind(id, '<Button-1>', lambda x: show_color('blue'))
 
-    id = colors.create_rectangle((250,10,270,30),fill = "purple")
+    id = colors.create_rectangle((220,10,240,30),fill = "purple")
     colors.tag_bind(id, '<Button-1>', lambda x: show_color('purple'))
 
-predictedWord = ""
 
 
 def upload_file():
@@ -96,6 +93,8 @@ def upload_file():
         cv2.imshow("Uploaded Image",img2)
         cv2.imwrite("images/Model Temp Images/captured_snapshot_out.jpg",img)
         predictedWord=getPredictedOutsideWord()   # read the image file
+        outputText = "The model predicted: " + predictedWord
+        label.config(text=outputText)
         # img=ImageTk.PhotoImage(img)
         e1 =tk.Label(root)
         e1.grid(row=row,column=col)
@@ -106,17 +105,17 @@ def upload_file():
             col=1    # start with first column
         else:       # within the same row 
             col=col+1 # increase to next column
+    
 
 
 
 display_pallete()
 
-canvas = Canvas(root, width = 600, height = 100, background="white", cursor="hand2")
+canvas = Canvas(root, width = 550, height = 100, background="white", cursor="hand2")
 canvas.pack()
-canvas.place(x=130,y=75)
+canvas.place(x=100,y=100)
 
-label = tk.Label(root, text=predictedWord)
-label.place(x=300,y=10)
+
 
 canvas.bind('<Button-1>', locate_xy)
 canvas.bind('<B1-Motion>', addLine)
@@ -131,7 +130,7 @@ y = root.winfo_rooty() + canvas.winfo_y()
 x1 = x + canvas.winfo_width()
 y1 = y + canvas.winfo_height()
 capture_region = (x, y, x1, y1)
-print(x)
+
 
 
 
@@ -149,25 +148,34 @@ def capture_and_send():
     pil_img = Image.open(io.BytesIO(img))
     
     # Crop the image to the size of the canvas.
-    pil_img = pil_img.crop((0, 0,450,80))
+    pil_img = pil_img.crop((0, 0,410,80))
     
     # Save the image to disk.
     pil_img.save("images/Model Temp Images/captured_snapshot.jpg")
     predictedWord = getPredictedWord()
-    label.config(text=predictedWord)
-    label.pack()
+    outputText = "The model predicted: " + predictedWord
+    label.config(text=outputText)
+    
+    
 
 
 
+label = Label(root,text="",font=('Helvetica bold', 22))
+label.pack()
+label.place(relx = 0.5,
+                   rely = 0.8,
+                   anchor = 'center')
 
-button = tk.Button(root, text="Capture Snapshot", command=capture_and_send)
-b1 = tk.Button(root, text='Upload Files', 
+button = tk.Button(root, text="Predict Word", width=20, command=capture_and_send)
+b1 = tk.Button(root, text='Upload Image', 
    width=20,command = lambda:upload_file())
 
 button.pack()
 b1.pack()
 button.place(x = 400, y = 230)
 b1.place(x=200,y=230)
+
+
 
 root. mainloop()
 
