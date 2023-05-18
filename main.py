@@ -1,6 +1,8 @@
 import io
 from modelController import *
 from tkinter import *
+from tkinter import filedialog
+from tkinter.filedialog import askopenfile
 from tkinter.colorchooser import askcolor
 from PIL import ImageTk, Image, ImageChops
 from tkinter import ttk
@@ -46,6 +48,8 @@ root.iconphoto(False, image_icon)
 eraser = ImageTk.PhotoImage(file = "eraser.png")
 Button(root, image = eraser, bg = "#f2f3f5", command = new_canvas).place(x = 750, y = 10)
 
+
+
 colors = Canvas(root, bg = "#ffffff", width = 300, height = 37, bd = 0)
 colors.place(x = 400, y = 10)
 
@@ -77,11 +81,41 @@ def display_pallete():
     id = colors.create_rectangle((250,10,270,30),fill = "purple")
     colors.tag_bind(id, '<Button-1>', lambda x: show_color('purple'))
 
+predictedWord = ""
+
+
+def upload_file():
+    f_types = [('Jpg Files', '.jpg'),
+    ('PNG Files','.png')]   # type of files to select 
+    filename = tk.filedialog.askopenfilename(multiple=True,filetypes=f_types)
+    col=1 # start from column 1
+    row=3 # start from row 3 
+    for f in filename:
+        img=Image.open(f)
+        img.save("captured_snapshot_out.jpg")  
+        predictedWord=processOutsideImage()   # read the image file
+        img=img.resize((100,100)) # new width & height
+        img=ImageTk.PhotoImage(img)
+        e1 =tk.Label(root)
+        e1.grid(row=row,column=col)
+        # e1.image = img # keep a reference! by attaching it to a widget attribute
+        # e1['image']=img # Show Image
+        if(col==3): # start new line after third column
+            row=row+1# start wtih next row
+            col=1    # start with first column
+        else:       # within the same row 
+            col=col+1 # increase to next column
+
+
+
 display_pallete()
 
 canvas = Canvas(root, width = 600, height = 100, background="white", cursor="hand2")
 canvas.pack()
 canvas.place(x=130,y=75)
+
+label = tk.Label(root, text=predictedWord)
+label.place(x=300,y=10)
 
 canvas.bind('<Button-1>', locate_xy)
 canvas.bind('<B1-Motion>', addLine)
@@ -99,7 +133,6 @@ capture_region = (x, y, x1, y1)
 print(x)
 
 
-predictedWord = ""
 
 # Define the function to capture the snapshot and send it to the machine learning model
 def capture_and_send():
@@ -120,12 +153,20 @@ def capture_and_send():
     # Save the image to disk.
     pil_img.save("captured_snapshot.jpg")
     predictedWord = getPredictedWord()
+    label.config(text=predictedWord)
+    label.pack()
+
+
 
 
 button = tk.Button(root, text="Capture Snapshot", command=capture_and_send)
+b1 = tk.Button(root, text='Upload Files', 
+   width=20,command = lambda:upload_file())
 
 button.pack()
+b1.pack()
 button.place(x = 400, y = 230)
+b1.place(x=200,y=230)
 
 root. mainloop()
 
